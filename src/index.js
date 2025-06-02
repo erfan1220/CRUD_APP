@@ -12,10 +12,11 @@ const port = process.env.PORT || 3001;
 
 // middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 app.use(cors());
 
-// routes  //api
-app.use("/api", userroutes);
+// routes 
+app.use("/user", userroutes);
 // const result = await pool.query("select * from users");
 // console.log(result.rows);
 
