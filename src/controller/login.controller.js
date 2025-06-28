@@ -16,6 +16,7 @@ export const login = async (req, res, next) => {
       handleResponse(res, 200, "-1", Result.token);
     } else {
       handleResponse(res, 200, "1", Result.token);
+      // console.log(Result.token);
     }
   } catch (error) {
     next(error)

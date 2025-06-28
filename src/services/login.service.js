@@ -14,13 +14,13 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 
 async function sendcode(mail) {
-  console.log(mail);
+  console.log(`mail is ${mail}`);
   const code = Math.floor(100000 + Math.random() * 900000);
 
   const token = jwt.sign(
     { email: mail, code },
     JWT_SECRET,
-    { expiresIn: '1m' }
+    { expiresIn: '3m' }
   );
   await transporter.sendMail({
     from: 'sltanyh468@gmail.com',
