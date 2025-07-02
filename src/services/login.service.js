@@ -18,7 +18,7 @@ async function sendcode(mail) {
   const code = Math.floor(100000 + Math.random() * 900000);
 
   const token = jwt.sign(
-    { email: mail, code },
+    { email: mail, code: code },
     JWT_SECRET,
     { expiresIn: '3m' }
   );
@@ -33,7 +33,7 @@ async function sendcode(mail) {
 
 export const login = async (email) => {
   const token = await sendcode(email);
-  const result = await pool.query("select userpass AS password from users where email = $1", [email]);
+  const result = await pool.query("select * from users where email = $1", [email]);
   return { token, user: result.rows[0] }
 }
 
