@@ -1,4 +1,4 @@
-import pool from "../config/db.js";
+import pool from "../../config/db.js";
 import jwt from "jsonwebtoken";
 
 export async function Register(name, mail, password, phone) {
@@ -18,7 +18,7 @@ export async function Register(name, mail, password, phone) {
       const values = [name, mail, phone, password];
       const result = await pool.query(insertQuery, values);
       const { id, email, role, username } = result.rows[0];
-      console.log(result.rows[0]);
+      // console.log(result.rows[0]);
 
       const payload = {
         id: id,

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import pool from "../config/db.js";
+import pool from "../../config/db.js";
 
 export async function verifyCodeJWT(token, inputCode) {
   try {

@@ -1,4 +1,4 @@
-import * as userService from "../services/login.service.js";
+import * as userService from "../../services/user/auth.service.js";
 
 const handleResponse = (res, status, message, data = null) => {
   res.status(status).json({
@@ -13,9 +13,9 @@ export const login = async (req, res, next) => {
     const { user_email } = req.body;
     const Result = await userService.login(user_email);
     if (!Result.user) {
-      handleResponse(res, 200, "-1", Result.token);
+      return handleResponse(res, 200, "-1", Result.token);
     } else {
-      handleResponse(res, 200, "1", Result.token);
+      return handleResponse(res, 200, "1", Result.token);
       // console.log(Result.token);
     }
   } catch (error) {

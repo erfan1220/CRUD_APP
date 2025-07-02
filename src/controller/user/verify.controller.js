@@ -1,4 +1,4 @@
-import { verifyCodeJWT } from "../services/verify.service.js";
+import { verifyCodeJWT } from "../../services/user/verification.service.js";
 
 const handleResponse = (res, status, message, data = null) => {
   res.status(status).json({
@@ -15,9 +15,9 @@ export const verify = async (req, res, next) => {
     const isValid = await verifyCodeJWT(token, inputcode);
 
     if (!isValid) {
-      handleResponse(res, 400, "Invalid or expired code.");
+      return handleResponse(res, 400, "Invalid or expired code.");
     } else {
-      handleResponse(res, 200, "Code verified!", isValid);
+      return handleResponse(res, 200, "Code verified!", isValid);
     }
   } catch (error) {
     next(error);

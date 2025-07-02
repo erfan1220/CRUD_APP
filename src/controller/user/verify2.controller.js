@@ -1,4 +1,4 @@
-import { verifyPassword } from "../services/verify2.service.js";
+import { verifyPassword } from "../../services/user/verify2.service.js";
 
 const handleResponse = (res, status, message, data = null) => {
   res.status(status).json({
@@ -14,9 +14,9 @@ export const verify2 = async (req, res, next) => {
     const isValid = verifyPassword(token, password);
 
     if (!isValid) {
-      handleResponse(res, 400, "Invalid password.");
+      return handleResponse(res, 400, "Invalid password.");
     } else {
-      handleResponse(res, 200, "Password verified!", isValid.loginToken);
+      return handleResponse(res, 200, "Password verified!", isValid.loginToken);
     }
   } catch (error) {
     next(error);
