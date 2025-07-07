@@ -10,17 +10,17 @@ export async function verifyCodeJWT(token, inputCode) {
       console.log("test");
       return false;
     } else {
-      // console.log(decoded.email);
+
       const email = decoded.email;
       const result = await pool.query("select * from users where email = $1", [
         email,
       ]);
-      // console.log(result);
+
       const user = result.rows[0];
       if (user == null) {
         return true;
       }
-      // console.log(user);
+
       const payload = {
         id: user.user_id,
         email: user.email,
@@ -28,7 +28,7 @@ export async function verifyCodeJWT(token, inputCode) {
         name: user.username,
       };
       const loginToken = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "3h",
+        expiresIn: "24h",
       });
       return loginToken;
     }
