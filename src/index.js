@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import userroutes from "./routes/user.routes.js";
-import productroutes from "./routes/admin.routes.js";
+import adminroutes from "./routes/admin.routes.js";
+import productroutes from "./routes/product.routes.js"
 import errorHandling from "./middlewares/errorHandler.js";
 // import pool from "./config/db.js";
 
@@ -18,7 +19,8 @@ app.use(cors());
 
 // routes
 app.use("/user", userroutes);
-app.use("/admin", productroutes);
+app.use("/admin", adminroutes);
+app.use('/api', productroutes)
 // const result = await pool.query("select * from users");
 // console.log(result.rows);
 

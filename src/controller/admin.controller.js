@@ -1,10 +1,10 @@
-import * as productService from "../services/getProducts.service.js";
+import * as adminService from "../services/admin.service.js";
 
 export const getAllproducts = async (req, res, next) => {
   try {
     // const token = req.headers.authorization?.split(" ")[1];
     // console.log(products);
-    const products = await productService.getProducts();
+    const products = await adminService.getProducts();
     return res.status(200).json(products);
 
   } catch (error) {
@@ -16,7 +16,7 @@ export const getAllproducts = async (req, res, next) => {
 export const deleteProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await productService.deleteProductById(id);
+    const result = await adminService.deleteProductById(id);
     if (result === 1) {
       return res.status(200).json({ message: 'Product deleted successfully' })
     } else {

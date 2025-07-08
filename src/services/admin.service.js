@@ -2,8 +2,8 @@ import pool from "../config/db.js";
 
 
 export async function getProducts() {
-  const Query = await pool.query("select phone_id , name from phones");
-  return Query.rows;
+  const result = await pool.query("select phone_id , name from phones");
+  return result.rows;
   // console.log(Query);
   //   console.log(Query.rows[0]);
 }
