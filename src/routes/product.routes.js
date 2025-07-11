@@ -1,13 +1,14 @@
 import express from "express";
 
 
-import { getAllBrands } from "../controller/product/brand.controller.js";
-import { getAllSellers } from "../controller/product/sellers.controller.js";
+import * as productController from "../controller/product/product.controller.js"
 
 
 const router = express.Router();
 
-router.get('/brands', getAllBrands);
-router.get('/sellers', getAllSellers)
+router.get('/brands', productController.Brands);
+router.get('/sellers', productController.Sellers);
+router.get('/categories', productController.Categories);
+router.get('/subcategories', productController.Subcategories);
 
 export default router;
