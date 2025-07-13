@@ -29,3 +29,11 @@ export const deleteProduct = async (req, res, next) => {
     next(error);
   }
 }
+
+export const addProduct = async (req, res, next) => {
+  try {
+    const result = adminService.addProduct(req.body);
+  } catch (error) {
+    next(error)
+  }
+}

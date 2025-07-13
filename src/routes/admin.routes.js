@@ -1,12 +1,14 @@
 import express from "express";
 
-import { getAllproducts } from "../controller/admin.controller.js";
+
+import * as adminController from "../controller/admin.controller.js"
 import { adminAuthMiddleware } from "../middlewares/adminAuthMiddleware.js";
-import { deleteProduct } from "../controller/admin.controller.js";
+
 
 const router = express.Router();
 
-router.get("/products", adminAuthMiddleware, getAllproducts);
-router.delete('/products/:id', adminAuthMiddleware, deleteProduct);
+router.get("/products", adminAuthMiddleware, adminController.getAllproducts);
+router.delete('/products/:id', adminAuthMiddleware, adminController.deleteProduct);
+router.post("/products", adminAuthMiddleware, adminController.addProduct)
 
 export default router;
