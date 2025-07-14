@@ -1,4 +1,6 @@
 import express from "express";
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' });
 
 
 import * as adminController from "../controller/admin.controller.js"
@@ -9,6 +11,6 @@ const router = express.Router();
 
 router.get("/products", adminAuthMiddleware, adminController.getAllproducts);
 router.delete('/products/:id', adminAuthMiddleware, adminController.deleteProduct);
-router.post("/products", adminAuthMiddleware, adminController.addProduct)
+router.post("/products", upload.single("mainImage"), adminAuthMiddleware, adminController.addProduct)
 
 export default router;

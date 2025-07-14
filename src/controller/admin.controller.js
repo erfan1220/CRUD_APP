@@ -2,8 +2,6 @@ import * as adminService from "../services/admin.service.js";
 
 export const getAllproducts = async (req, res, next) => {
   try {
-    // const token = req.headers.authorization?.split(" ")[1];
-    // console.log(products);
     const products = await adminService.getProducts();
     return res.status(200).json(products);
 
@@ -32,7 +30,40 @@ export const deleteProduct = async (req, res, next) => {
 
 export const addProduct = async (req, res, next) => {
   try {
-    const result = adminService.addProduct(req.body);
+    const {
+      'Name Product': name,
+      Price,
+      Discount,
+      Stock,
+      Brand,
+      Seller,
+      'Short Description': shortDesc,
+      Description,
+      'Expert Review': expertReview,
+      specification
+    } = req.body;
+
+    const image = req.file.filename || null;
+
+    let specs = JSON.parse(specification);
+
+    const body = {
+      name: name,
+      price: Price,
+      discount: parseInt(Discount),
+      stock: parseInt(Stock),
+      brandId: Brand,
+      sellerId: Seller,
+      shortDesc: shortDesc,
+      description: Description,
+      expertReview: expertReview,
+      specifications: specs,
+      image: image
+    }
+
+    const result = await adminService.addProduct(body) ? res.status(201).json({ message: 'Product added successfully' }) : res.status(500).json({ message: 'Failed to add product' })
+    return result
+
   } catch (error) {
     next(error)
   }
