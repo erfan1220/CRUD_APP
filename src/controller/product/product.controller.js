@@ -11,7 +11,8 @@ export const Brands = async (req, res, next) => {
 
 export const Sellers = async (req, res, next) => {
   try {
-    const sellers = await productService.getSellers();
+    const { id } = req.params;
+    const sellers = await productService.getSellers(id);
     return res.status(200).json(sellers);
   } catch (error) {
     next(error);

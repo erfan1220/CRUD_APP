@@ -10,13 +10,23 @@ const __dirname = dirname(__filename);
 
 export async function getProducts() {
   const result = await pool.query("select phone_id , name from phones");
-  // query = "select json_build_object( 'basicData', json_build_object('id',p.phone_id,'brand',brand_id,'name',name), 'seller') as result"
   return result.rows;
-  // console.log(Query);
-  //   console.log(Query.rows[0]);
+}
+
+export async function productDetails(phoneId, sellerId) {
+  const Query = "select ps.price, ps.stock, array_agg(distinct jsonb_build_object"
+    + "('category_id',c.id, 'category_name',c.name, 'subcategory_name',s2.name, 'subcategory_id',s2.id, 'value',s.value)) as specifications,"
+    + "array_agg(distinct jsonb_build_object('partname',ie.partname,'value',ie.value)) as explanation "
+    + "from phones p left join "
+    + "phone_sellers ps on(p.phone_id  = ps.phone_id ) left join introduction_expertreview ie on(ie.phone_id = p.phone_id) "
+    + "left join specifications s on(s.phone_id = p.phone_id ) left join subcategories s2 on(s2.id = s.subcategory_id) "
+    + "left join categories c on (c.id = s2.category_id ) where p.phone_id = $1 and ps.seller_id = $2 GROUP BY ps.price, ps.stock"
+  const result = await pool.query(Query, [phoneId, sellerId])
+  return result.rows;
 }
 
 export async function deleteProductById(id) {
+
   try {
     const imagePath = (await pool.query("select image_url from images where phone_id = $1", [id])).rows[0].image_url;
 
