@@ -10,9 +10,9 @@ import { adminAuthMiddleware } from "../middlewares/adminAuthMiddleware.js";
 const router = express.Router();
 
 router.get("/products", adminAuthMiddleware, adminController.getAllproducts);
-router.get('/products/:phone_id/sellers/:seller_id/details', adminController.details)
+router.get('/products/details', adminController.details)
 router.delete('/products/:id', adminAuthMiddleware, adminController.deleteProduct);
-router.post("/products", upload.single("mainImage"), adminAuthMiddleware, adminController.addProduct)
+router.post("/products", adminAuthMiddleware, upload.single("mainImage"), adminController.addProduct)
 
 
 export default router;

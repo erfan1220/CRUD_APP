@@ -12,8 +12,14 @@ export const getAllproducts = async (req, res, next) => {
 
 export const details = async (req, res, next) => {
   try {
-    const { phone_id, seller_id } = req.params;
-    const result = await adminService.productDetails(phone_id, seller_id);
+    const phoneId = parseInt(req.query.phoneId);
+    const sellerId = parseInt(req.query.sellerId);
+
+    if (!phoneId || !sellerId) {
+      return res.status(400).json({ message: 'Missing phoneId or sellerId' });
+    }
+
+    const result = await adminService.productDetails(phoneId, sellerId);
     res.status(200).json(result)
   } catch (error) {
     next(error)

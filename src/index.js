@@ -21,7 +21,8 @@ app.use('/uploads', express.static('uploads'));
 // routes
 app.use("/user", userroutes);
 app.use("/admin", adminroutes);
-app.use('/api', productroutes)
+app.use('/api', productroutes);
+
 // const result = await pool.query("select * from users");
 // console.log(result.rows);
 

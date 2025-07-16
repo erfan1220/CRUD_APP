@@ -1,4 +1,3 @@
-import { Query } from "pg";
 import pool from "../../config/db.js";
 
 export async function getBrands() {
@@ -13,7 +12,6 @@ export async function getSellers(id) {
     } else {
         result = await pool.query('select s.seller_id , s."name" from phone_sellers ps left join sellers s on(s.seller_id = ps.seller_id ) where ps.phone_id = $1', [id]);
     }
-    // const result = await  pool.query(Query)
     return result.rows;
 }
 
