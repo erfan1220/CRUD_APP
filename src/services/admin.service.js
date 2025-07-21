@@ -108,3 +108,8 @@ export async function addProduct(body) {
     return false;
   }
 }
+
+export async function update(product_id, seller_id, changes) {
+  const fields = Object.keys(changes);
+  if (!fields.length) return;
+}
