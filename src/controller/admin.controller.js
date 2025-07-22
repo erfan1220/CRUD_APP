@@ -90,23 +90,23 @@ export const updateProduct = async (req, res, next) => {
       seller_id,
       price,
       stock,
-      shortdescription,
+      shortDescription,
       description,
-      expertreview,
-      specifications,
+      expertReview,
+      specification,
     } = req.body;
 
     const changes = {};
 
     if (price !== undefined) changes.price = price;
     if (stock !== undefined) changes.stock = stock;
-    if (shortdescription) changes.shortDescription = shortdescription;
+    if (shortDescription) changes.shortDescription = shortDescription;
     if (description) changes.description = description;
-    if (expertreview) changes.expertReview = expertreview;
+    if (expertReview) changes.expertReview = expertReview;
 
-    if (specifications) {
+    if (specification) {
       try {
-        changes.specifications = JSON.parse(specifications);
+        changes.specifications = JSON.parse(specification);
       } catch {
         return res.status(400).json({ error: "Invalid specifications JSON" });
       }
@@ -115,6 +115,8 @@ export const updateProduct = async (req, res, next) => {
     if (req.file) {
       changes.image_url = req.file.filename;
     }
+
+    // console.log(changes);
 
     const result = await adminService.update(product_id, seller_id, changes);
 

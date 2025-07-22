@@ -26,7 +26,7 @@ export async function productDetails(phoneId, sellerId) {
   return result.rows;
 }
 
-export async function deleteProductById(id) {
+async function deleteImage(id) {
   try {
     const imagePath = (
       await pool.query("select image_url from images where phone_id = $1", [id])
@@ -42,6 +42,14 @@ export async function deleteProductById(id) {
         }
       });
     }
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export async function deleteProductById(id) {
+  try {
+    deleteImage(id);
 
     const result = await pool.query("delete from phones where phone_id = $1", [
       id,
@@ -70,7 +78,7 @@ export async function addProduct(body) {
     } = body;
 
     const labels = {
-      introduction: description,
+      description: description,
       expertReview: expertReview,
       shortDescription: shortDesc,
     };
@@ -110,6 +118,66 @@ export async function addProduct(body) {
 }
 
 export async function update(product_id, seller_id, changes) {
-  const fields = Object.keys(changes);
-  if (!fields.length) return;
+  try {
+    const fields = Object.keys(changes);
+    if (!fields.length) {
+      console.log("test");
+      return;
+    }
+
+    let updates = [];
+    let values = [];
+    let i = 1;
+
+    if (changes.price !== undefined) {
+      updates.push(`price = $${i++}`);
+      values.push(changes.price);
+    }
+
+    if (changes.stock !== undefined) {
+      updates.push(`stock = $${i++}`);
+      values.push(changes.stock);
+    }
+
+    if (updates.length > 0) {
+      values.push(product_id);
+      values.push(seller_id)
+      const query = `UPDATE phone_sellers SET ${updates.join(', ')} WHERE phone_id = $${i++} and seller_id = $${i++}`;
+      await pool.query(query, values);
+    }
+
+    if (changes.image_url !== undefined) {
+      deleteImage(product_id)
+      await pool.query("update images set image_url = $1 where phone_id = $2", [changes.image_url, product_id])
+    }
+
+    const explanationParts = ['shortDescription', 'description', 'expertReview'];
+
+    for (const part of explanationParts) {
+      if (changes[part] !== undefined) {
+        await pool.query(
+          `INSERT INTO introduction_expertreview (phone_id, partname, value)
+           VALUES ($1, $2, $3)
+           ON CONFLICT (phone_id, partname)
+           DO UPDATE SET value = EXCLUDED.value`,
+          [product_id, part, changes[part]]
+        );
+      }
+    }
+
+    if (changes.specifications !== undefined) {
+      await pool.query(`delete from specifications where phone_id = $1`, [product_id])
+      for (const s of changes.specifications) {
+        await pool.query(
+          `INSERT INTO specifications (phone_id, subcategory_id, value) VALUES ($1, $2, $3)`,
+          [product_id, s.subCategoryId, s.value]
+        );
+      }
+    }
+
+    return true
+  } catch (error) {
+    console.error(error)
+    return false
+  }
 }
